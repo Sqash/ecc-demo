@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "description": "a demonstration of elliptic curve cryptography as a webapp",
   "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {},
-  "scripts": {
+  "dependencies": {
+    "angular": "^1.4.8",
+    "big-integer": "^1.6.8"
   },
+  "devDependencies": {},
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sqash/ecc-demo.git"
