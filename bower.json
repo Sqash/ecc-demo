@@ -1,0 +1,23 @@
+{
+  "name": "ecc-demo",
+  "description": "a demonstration of elliptic curve cryptography as a webapp",
+  "main": "index.js",
+  "authors": [
+    "Sam Whiteley"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "ecc",
+    "demo"
+  ],
+  "homepage": "https://github.com/Sqash/ecc-demo",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
