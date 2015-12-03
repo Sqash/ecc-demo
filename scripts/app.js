@@ -133,7 +133,7 @@ angular.module('eccApp',[])
 
   $scope.genPubKey = function() {
     var pk = parseInt($scope.privateKey, 10);
-    if(typeof pk === 'number' && isFinite(pk) && Math.floor(pk) === pk) {
+    if(typeof pk === 'number' && isFinite(pk) && Math.floor(pk) === pk && pk > 0 && c23.prime.cmpn(pk) > 0) {
       var g = c23.generators[parseInt($scope.genChoice, 10)];
       $scope.publicKey = scalarMult(g, new BN($scope.privateKey, 10));
     }
