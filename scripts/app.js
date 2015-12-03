@@ -6,11 +6,18 @@ angular.module('eccApp',[])
   var b2 = new BN('2', 10);
   var b3 = new BN('3', 10);
   var b23 = new BN('23', 10);
+
   var c23 = {
     prime: b23,
     equation: 'y\u00b2 = x\u00b3 + x',
     a: b1,
     b: b0,
+    generators: [
+      [new BN('11', 10), new BN('13', 10)],
+      [new BN('17', 10), new BN('13', 10)],
+      [new BN('19', 10), new BN('22', 10)],
+      [new BN('21', 10), new BN('17', 10)]
+    ],
     pOnCurve: function(p) {
       var valid = true;
       //invalid x coordinate
@@ -30,15 +37,15 @@ angular.module('eccApp',[])
     if( p === Number.POSITIVE_INFINITY ) return q;
     if( !validP(p, c23) || !validP(q, c23) ) valid = false;
     if(p[0].cmp(q[0]) === 0 && p[1].cmp(q[1]) === 0) valid = false;
-    if(p[0].cmp(q[0]) === 0 && q[1].cmp(p[1].neg().umod(b23)) === 0) valid = false;
+    if(p[0].cmp(q[0]) === 0 && q[1].cmp(p[1].neg().umod(c23.prime)) === 0) valid = false;
     if(!valid) {
       console.log('point p or q can\'t add. p:' + p + ' q:' + q);
       return valid;
     }
 
-    var s = p[1].sub(q[1]).mul(p[0].sub(q[0]).invm(b23)).umod(b23);
-    var xR = s.pow(b2).sub(p[0]).sub(q[0]).umod(b23);
-    var yR = s.mul(p[0].sub(xR)).sub(p[1]).umod(b23);
+    var s = p[1].sub(q[1]).mul(p[0].sub(q[0]).invm(c23.prime)).umod(c23.prime);
+    var xR = s.pow(b2).sub(p[0]).sub(q[0]).umod(c23.prime);
+    var yR = s.mul(p[0].sub(xR)).sub(p[1]).umod(c23.prime);
     return [xR, yR];
   };
 
@@ -52,9 +59,9 @@ angular.module('eccApp',[])
     }
 
     //Double
-    var s = p[0].pow(b2).mul(b3).add(c23.a).mul(p[1].mul(b2).invm(b23)).umod(b23);
-    var xR = s.pow(b2).sub(p[0].mul(b2)).umod(b23);
-    var yR = s.mul(p[0].sub(xR)).sub(p[1]).umod(b23);
+    var s = p[0].pow(b2).mul(b3).add(c23.a).mul(p[1].mul(b2).invm(c23.prime)).umod(c23.prime);
+    var xR = s.pow(b2).sub(p[0].mul(b2)).umod(c23.prime);
+    var yR = s.mul(p[0].sub(xR)).sub(p[1]).umod(c23.prime);
     return [xR, yR];
   }
 
@@ -65,7 +72,6 @@ angular.module('eccApp',[])
     }
 
     var len = k.bitLength();
-
     var R = Number.POSITIVE_INFINITY;
     var N = [p[0].clone(), p[1].clone()];
     for(var bit = 0; bit < len; bit++) {
@@ -78,6 +84,7 @@ angular.module('eccApp',[])
   }
 
   var validP = function(p, c) {
+    //Using Infinity as the '0 point' in ECC
     if( p === Number.POSITIVE_INFINITY ) return true;
     var valid;
     if( Object.prototype.toString.call(p) !== '[object Array]' ||
