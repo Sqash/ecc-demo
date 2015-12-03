@@ -1,2 +1,7 @@
-node_modules/
-bower_components/
+/node_modules/big-integer/
+/node_modules/bn.js/test/
+/node_modules/bn.js/.*
+/node_modules/bn.js/package.json
+/node_modules/bn.js/README.md
+/bower_components/angular/**
+!/bower_components/angular/angular.min.js
