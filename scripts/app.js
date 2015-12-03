@@ -75,21 +75,30 @@ angular.module('eccApp',[])
   }
 
   // kP = R, 0 < k <= prime, P != '0'
-  var scalarMult = function(p, k) {
+  var scalarMult = function(p, k, strOut) {
     if( !validP(p, c23) || k.cmp(b0) < 1 || p === Number.POSITIVE_INFINITY ) {
       console.log('point p can\'t be multiplied by k. p:' + p + ' k:' + k.toString());
       return false;
     }
 
+    var log = new String('');
     var len = k.bitLength();
     var R = Number.POSITIVE_INFINITY;
     var N = [p[0].clone(), p[1].clone()];
+    log += k.toString()+'\u00b7g = '+k.toString()+'\u00b7['+p[0].toString()+', '+p[1].toString()+'] = ';
+    var first = true;
     for(var bit = 0; bit < len; bit++) {
       if(k.testn(bit)) {
         R = addPoints(R, N);
+        if(!first) {
+          log += ' + ';
+        } else { first = false; }
+        log += '[' + N[0].toString() + ', ' + N[1].toString() + ']';
       }
       N = doubleP(N);
     }
+    log += ' = [' + R[0].toString() + ', ' + R[1].toString() + ']';
+    if(strOut === true) return log;
     return R;
   }
 
@@ -123,7 +132,7 @@ angular.module('eccApp',[])
     var g = c23.generators[parseInt($scope.genChoice, 10)];
     $scope.cPoints = [];
     for(var i=1; i<=c23.prime; i++) {
-      $scope.cPoints.push(scalarMult(g, new BN(i.toString(), 10)));
+       $scope.cPoints.push(scalarMult(g, new BN(i.toString(), 10), true));
     }
   };
 
@@ -135,7 +144,7 @@ angular.module('eccApp',[])
     var pk = parseInt($scope.privateKey, 10);
     if(typeof pk === 'number' && isFinite(pk) && Math.floor(pk) === pk && pk > 0 && c23.prime.cmpn(pk) > 0) {
       var g = c23.generators[parseInt($scope.genChoice, 10)];
-      $scope.publicKey = scalarMult(g, new BN($scope.privateKey, 10));
+      $scope.publicKey = scalarMult(g, new BN($scope.privateKey, 10), true);
     }
   }
 
