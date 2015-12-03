@@ -13,10 +13,37 @@
     <h1>ECC demo</h1>
   </section>
 
+  <hr>
+
   <section class="page-block" ng-controller="eccFormController">
     <h2>Info</h2>
-    <p>Field Prime: <span>{{curve.prime.toString()}}</span></p>
-    <p>Curve equation: <span>{{curve.equation}}</span></p>
+    <p>
+    <span>Field Prime: {{curve.prime.toString()}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span>Curve equation: {{curve.equation}}</span>
+    </p>
+    <p><span>Generating points</span></p>
+    <ul>
+      <li ng-repeat="i in curve.generators">[{{i[0].toString()}},{{i[1].toString()}}]</li>
+    </ul>
+    <hr>
+
+    <h2>Tools</h2>
+
+    <form id="point-gen-form">
+      <h3>Generate curve points</h3>
+      <label for="generator-radio">Choose generator</label> <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="0" checked> 1 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="1"> 2 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="2"> 3 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="3"> 4 <br>
+      <input type="button" value="Generate" name="generate" ng-click="genPoints()">
+      <input type="button" value="Clear" name="clear" ng-click="clearPoints()">
+      <ul>
+        <li ng-repeat="p in cPoints">
+        [{{p[0].toString()}}, {{p[1].toString()}}]
+        </li>
+      </ul>
+    </form>
 
   </section>
 

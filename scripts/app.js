@@ -98,5 +98,14 @@ angular.module('eccApp',[])
   };
 
   $scope.curve = c23;
+  $scope.genChoice = '0';
+  $scope.cPoints = [];
+  $scope.genPoints = function() {
+    var g = c23.generators[parseInt($scope.genChoice, 10)];
+    $scope.cPoints = [];
+    for(var i=1; i<=c23.prime; i++) {
+      $scope.cPoints.push(scalarMult(g, new BN(i.toString(), 10)));
+    }
+  };
 
 }]);
