@@ -1,12 +1,17 @@
 angular.module('eccApp',[])
 
 .controller('eccFormController', ['$scope', function($scope) {
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~v Necessary Vars v~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+  //commonly used 'big' numbers
   var b0 = new BN('0', 10);
   var b1 = new BN('1', 10);
   var b2 = new BN('2', 10);
   var b3 = new BN('3', 10);
   var b23 = new BN('23', 10);
 
+  //data about example curve
   var c23 = {
     prime: b23,
     equation: 'y\u00b2 = x\u00b3 + x',
@@ -32,6 +37,9 @@ angular.module('eccApp',[])
     }
   };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~v ECC op. functions v~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+  // P + Q = R, where P != Q && P != -Q
   var addPoints = function(p, q) {
     var valid = true;
     if( p === Number.POSITIVE_INFINITY ) return q;
@@ -49,6 +57,7 @@ angular.module('eccApp',[])
     return [xR, yR];
   };
 
+  // 2P = R
   var doubleP = function(p) {
     var valid = true;
     if( !validP(p, c23) || p[1].cmp(b0) === 0 ) valid = false;
@@ -65,6 +74,7 @@ angular.module('eccApp',[])
     return [xR, yR];
   }
 
+  // kP = R, 0 < k <= prime, P != '0'
   var scalarMult = function(p, k) {
     if( !validP(p, c23) || k.cmp(b0) < 1 || p === Number.POSITIVE_INFINITY ) {
       console.log('point p can\'t be multiplied by k. p:' + p + ' k:' + k.toString());
@@ -83,6 +93,7 @@ angular.module('eccApp',[])
     return R;
   }
 
+  // P is valid for usage && on curve
   var validP = function(p, c) {
     //Using Infinity as the '0 point' in ECC
     if( p === Number.POSITIVE_INFINITY ) return true;
@@ -97,9 +108,17 @@ angular.module('eccApp',[])
     return valid;
   };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~v AngularJS gadgetry v~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+  //General usage vars
   $scope.curve = c23;
+
+  //Point generation vars and functions
   $scope.genChoice = '0';
   $scope.cPoints = [];
+  $scope.clearPoints = function() {
+    $scope.cPoints = [];
+  };
   $scope.genPoints = function() {
     var g = c23.generators[parseInt($scope.genChoice, 10)];
     $scope.cPoints = [];
