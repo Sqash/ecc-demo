@@ -112,9 +112,9 @@ angular.module('eccApp',[])
 
   //General usage vars
   $scope.curve = c23;
+  $scope.genChoice = '0';
 
   //Point generation vars and functions
-  $scope.genChoice = '0';
   $scope.cPoints = [];
   $scope.clearPoints = function() {
     $scope.cPoints = [];
@@ -126,5 +126,17 @@ angular.module('eccApp',[])
       $scope.cPoints.push(scalarMult(g, new BN(i.toString(), 10)));
     }
   };
+
+  //Key generation
+  $scope.privateKey = '';
+  $scope.publicKey = [NaN, NaN];
+
+  $scope.genPubKey = function() {
+    var pk = parseInt($scope.privateKey, 10);
+    if(typeof pk === 'number' && isFinite(pk) && Math.floor(pk) === pk) {
+      var g = c23.generators[parseInt($scope.genChoice, 10)];
+      $scope.publicKey = scalarMult(g, new BN($scope.privateKey, 10));
+    }
+  }
 
 }]);

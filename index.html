@@ -23,7 +23,9 @@
     </p>
     <p><span>Generating points</span></p>
     <ul>
-      <li ng-repeat="i in curve.generators">[{{i[0].toString()}},{{i[1].toString()}}]</li>
+      <li ng-repeat="i in curve.generators">
+      [{{i[0].toString()}},{{i[1].toString()}}]
+      </li>
     </ul>
     <hr>
 
@@ -40,9 +42,21 @@
       <input type="button" value="Clear" name="clear" ng-click="clearPoints()">
       <ul>
         <li ng-repeat="p in cPoints">
-        [{{p[0].toString()}}, {{p[1].toString()}}]
+        {{$index+1}}&#183;G = [{{p[0].toString()}}, {{p[1].toString()}}]
         </li>
       </ul>
+    </form>
+
+    <form id="keygen-form">
+      <h3>Generate a key</h3>
+      <label for="generator-radio">Choose generator</label> <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="0" checked> 1 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="1"> 2 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="2"> 3 <br>
+      <input type="radio" name="generator" ng-model="genChoice" value="3"> 4 <br>
+      <input type="text" ng-model="privateKey" placeholder="choose private key (0<k<{{curve.prime.toString()}})"> <br>
+      <input type="button" value="Generate" name="gen-key" ng-click="genPubKey()"> <br>
+      <p>Public Key: [{{publicKey[0].toString()}}, {{publicKey[1].toString()}}]</p>
     </form>
 
   </section>
